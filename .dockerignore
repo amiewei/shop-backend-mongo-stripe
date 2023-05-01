@@ -4,4 +4,5 @@ node_modules
 npm-debug.log
 dist
 .env
-TODO.node_modules
+TODO.md
+test

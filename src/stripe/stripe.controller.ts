@@ -1,14 +1,4 @@
-import {
-    Controller,
-    Post,
-    Body,
-    Get,
-    Param,
-    Patch,
-    Delete,
-    Res,
-    HttpCode,
-} from '@nestjs/common';
+import { Controller, Post, Body, Get, HttpCode } from '@nestjs/common';
 import { StripeService } from './stripe.service';
 
 @Controller('api')
@@ -44,12 +34,5 @@ export class StripeController {
     @Get('get-all-prices-and-products-stripe')
     async getAllStripe() {
         return await this.stripeService.getAllStripe();
-    }
-
-    @Get()
-    async getAllProductsFromDB() {
-        console.log('get all products from db');
-        // //returns the list of products from the injectable method from the class
-        // return await this.productsMongoService.getAllProducts();
     }
 }

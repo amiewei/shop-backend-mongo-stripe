@@ -10,6 +10,7 @@ MONGO DB
 STRIPE API
 1.create checkout session - complete
 how to show order confirmation upon successful checkout?
+
 2.How to link stripe price to mongodb price? --- once a day sync? how to sync? just need to get product info like latest price, description, bulgarian name etc. what about imageId? is mongodb's purpose just to cache product info? then shoul i use Redis instead? how does redis work? stripe is the source of truth for now.
 
 2.1 how to schedule the update to run? cronjob?

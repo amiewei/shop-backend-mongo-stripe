@@ -17,15 +17,3 @@ export class LoggerMiddleware implements NestMiddleware {
         next();
     }
 }
-
-//function can be used as global, class cannot
-export function loggerMiddlewareFunc(
-    req: Request,
-    res: Response,
-    next: NextFunction,
-) {
-    console.log(
-        'i am the logger middleware - Function - I am applied globally',
-    );
-    next();
-}

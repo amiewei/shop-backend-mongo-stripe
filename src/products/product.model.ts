@@ -2,7 +2,6 @@ import * as mongoose from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 
-//based on the mongoose base class, so this interface is mongoose compatible
 export interface Product extends mongoose.Document {
     id: string;
     itemName: string;
@@ -45,8 +44,6 @@ export class ProductMongo {
 
     @Prop({ required: true })
     stripeProductId: string;
-
-    //qty should be part of inventory table?
 }
 
 export const ProductSchema = SchemaFactory.createForClass(ProductMongo);

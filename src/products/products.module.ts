@@ -7,13 +7,11 @@ import { ProductMongo, ProductSchema } from './product.model';
 
 @Module({
     imports: [
-        //creates model and makes it injectable
         MongooseModule.forFeature([
-            //name: Product.name is just refering the name "Product" to reference the schema
             { name: ProductMongo.name, schema: ProductSchema },
         ]),
     ],
-    controllers: [ProductsMongoController], //dont forget to ALL the controllers and serivces here
+    controllers: [ProductsMongoController],
     providers: [ProductsMongoService, StripeService],
 })
 export class ProductsModule {}
