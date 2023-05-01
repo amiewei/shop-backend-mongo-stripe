@@ -10,7 +10,6 @@ export class StripeController {
     @HttpCode(200)
     async createCheckoutSession(@Body('cart') line_items: object) {
         console.log('stripe controller - create checkout session');
-
         const sessionUrl = await this.stripeService.createCheckoutSession(
             line_items,
         );
@@ -21,13 +20,11 @@ export class StripeController {
 
     @Get('get-all-products-stripe')
     async getAllProducts() {
-        console.log('get all products');
         return await this.stripeService.getAllProductsFromStripe();
     }
 
     @Get('get-all-prices-stripe')
     async getAllPrices() {
-        console.log('get all prices');
         return await this.stripeService.getAllPricesFromStripe();
     }
 
