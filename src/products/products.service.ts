@@ -1,12 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Product, Price, ProductMongo, ProductDocument } from './product.model';
+import { Product, ProductMongo, ProductDocument } from './product.model';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Error } from 'mongoose';
 
 @Injectable()
 export class ProductsMongoService {
     constructor(
-        //injectmodel (name of model)
         @InjectModel(ProductMongo.name)
         private readonly productModel: Model<ProductDocument>,
     ) {}
@@ -21,7 +20,7 @@ export class ProductsMongoService {
         stripeProductId: string,
     ) {
         console.log('products service - add product');
-        // const createdProduct = new this.productModel(product);
+
         const createdProduct = new this.productModel({
             itemName,
             itemDescription,
@@ -31,20 +30,16 @@ export class ProductsMongoService {
             stripePriceId,
             stripeProductId,
         });
-        console.log(createdProduct);
-
         try {
             const result = await createdProduct.save();
-            console.log('saved to mongoD. returning mongodb generated id');
+            console.log('saved to mongo');
             return result.id as string;
         } catch (error) {
-            console.log('error caught');
             if (error instanceof Error.ValidationError) {
                 const validationError = new Error(
                     'Validation error: ' + error.message,
                 );
                 validationError.name = 'ValidationError';
-                console.log(validationError);
                 // return validationError;
             } else {
                 console.log('error');
@@ -53,10 +48,8 @@ export class ProductsMongoService {
         }
     }
 
+    //get all products but not include to display to frontend if theres no price listed
     async getAllProducts() {
-        console.log(
-            'products service - get all products but not include if theres no price',
-        );
         const products = await this.productModel.find().exec();
         const updatedProducts = products
             .filter((prod) => prod.price !== undefined)
@@ -71,15 +64,12 @@ export class ProductsMongoService {
                 stripePriceId: prod.stripePriceId,
                 stripeProductId: prod.stripeProductId,
             }));
-        console.log(updatedProducts);
 
-        //.exec() returns a promise
         return updatedProducts;
     }
 
     async getSingleProduct(id: string) {
         const product = await this.findProduct(id);
-        console.log(product);
 
         return {
             id: product.id,
@@ -103,11 +93,9 @@ export class ProductsMongoService {
         stripePriceId: string,
         stripeProductId: string,
     ) {
-        console.log(id, itemName, itemDescription, bulgarianName, price);
         //reusing the getSingleProduct mthod above
         const updatedProduct = await this.findProduct(id);
 
-        //see id is not included here so not possible to update id
         if (itemName) {
             updatedProduct.itemName = itemName;
         }
@@ -120,20 +108,27 @@ export class ProductsMongoService {
         if (bulgarianName) {
             updatedProduct.bulgarianName = bulgarianName;
         }
+        if (stripePriceId) {
+            updatedProduct.stripePriceId = stripePriceId;
+        }
+        if (stripeProductId) {
+            updatedProduct.stripeProductId = stripeProductId;
+        }
+        if (imageId) {
+            updatedProduct.imageId = [imageId];
+        }
 
         //update existing product
         updatedProduct.save();
-        console.log(updatedProduct);
-
         return updatedProduct as Product;
     }
 
-    async updateProductPricesInMongo(updatedStripeProducts) {
-        //find by productId and update fields
-
-        for (const product of updatedStripeProducts) {
+    //find by productId and update fields
+    async updateProductPricesInMongo(stripeProductsToUpdate) {
+        for (const product of stripeProductsToUpdate) {
             try {
-                const filter = { stripeProductId: product.stripeProductId };
+                const filter = { stripeProductId: product.productId };
+                console.log('updating: ' + product.stripeProductId);
                 const update = {
                     itemName: product.itemName,
                     itemDescription: product.itemDescription,
@@ -147,10 +142,8 @@ export class ProductsMongoService {
                 const updatedProduct = await this.productModel
                     .findOneAndUpdate(filter, update, options)
                     .exec();
-                console.log(updatedProduct);
             } catch (error) {
                 console.log(error + product.itemName);
-                //continue the loop
                 continue;
             }
         }
@@ -179,9 +172,6 @@ export class ProductsMongoService {
             throw new NotFoundException('Could Not Find Product');
         }
 
-        if (!product) {
-            throw new NotFoundException('Could Not Find Product');
-        }
         return product as Product;
     }
 }

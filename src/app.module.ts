@@ -7,18 +7,58 @@ import { StripeModule } from './stripe/stripe.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { Connection } from 'mongoose';
+// import * as vault from 'node-vault';
 
 //defines scope of each module for performance
 @Module({
     imports: [
         //for environment variables
         ConfigModule.forRoot(),
-        MongooseModule.forRoot(
-            'mongodb+srv://admin:admin@cluster0.ree9mb6.mongodb.net/Products?retryWrites=true&w=majority',
-        ),
+
+        //using vault for secret mgt
+        MongooseModule.forRootAsync({
+            useFactory: async () => {
+                // ------------vault alternative----------------
+                // process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'; //dev only
+
+                // const options = {
+                //     apiVersion: 'v1',
+                //     endpoint: process.env.VAULT_ENDPOINT,
+                //     requestOptions: {
+                //         strictSSL: false, //dev only because we are using self signed SSL cert not ca signed
+                //     },
+                // };
+
+                // // get new instance of the client
+                // const vault = require('node-vault')(options);
+
+                // const result = await vault.approleLogin({
+                //     role_id: process.env.VAULT_ROLE_ID,
+                //     secret_id: process.env.VAULT_SECRET_ID,
+                // });
+
+                // // console.log(result);
+
+                // vault.token = result.auth.client_token; // Add token to vault object for subsequent requests.
+                // const { data } = await vault.read(process.env.VAULT_SECRET); // Retrieve the secret stored in previous steps.
+                // const mongoUser = data.MONGO_USER;
+                // const mongoPw = data.MONGO_PW;
+
+                //-------------end vault--------------
+
+                const mongoUser = process.env.MONGO_USER;
+                const mongoPw = process.env.MONGO_PW;
+
+                return {
+                    uri: `mongodb+srv://${mongoUser}:${mongoPw}@cluster0.ree9mb6.mongodb.net/Products?retryWrites=true&w=majority`,
+                    useNewUrlParser: true,
+                    useUnifiedTopology: true,
+                };
+            },
+        }),
         ProductsModule,
         StripeModule,
-    ], // nestjs feature to link module import, need to import the specific module
+    ],
     controllers: [AppController],
     providers: [
         AppService,
@@ -32,8 +72,6 @@ import { Connection } from 'mongoose';
         },
     ],
 })
-// export class AppModule {}
-
 // middleware for specific routes defined here
 export class AppModule implements NestModule {
     configure(consumer: MiddlewareConsumer) {

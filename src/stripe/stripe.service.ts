@@ -1,16 +1,12 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-// import { Product, ProductMongo, ProductDocument } from './stripe.model';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model, Error } from 'mongoose';
+import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class StripeService {
-    constructor() {} // private readonly productModel: Model<ProductDocument>, // @InjectModel(ProductMongo.name) //injectmodel (name of model)
+    constructor() {}
 
     async createCheckoutSession(line_items: object) {
         console.log('create Stripe checkout session');
         const stripe = require('stripe')(process.env.STRIPE_API_KEY);
-        // console.log(line_items);
         const session = await stripe.checkout.sessions.create({
             line_items: line_items,
             mode: 'payment',
@@ -21,10 +17,6 @@ export class StripeService {
             },
         });
 
-        console.log('sessions: ');
-        console.log(session);
-
-        // res.redirect(303, session.url);
         return session.url;
     }
 
@@ -113,9 +105,6 @@ export class StripeService {
                 price: product.price,
             }),
         );
-
-        console.log('updatedStripeProducts: ');
-        console.log(updatedStripeProducts);
 
         return updatedStripeProducts;
     }
