@@ -36,8 +36,6 @@ lerna-debug.log*
 
 .env
 TODO.md
-.json
-**/*.json
-!tsconfig.json
-!tsconfig.build.json
+deprecated-sa-key.json
+sa-key.json
 cloudbuild.yaml
