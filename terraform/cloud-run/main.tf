@@ -1,5 +1,5 @@
 resource "google_cloud_run_v2_service" "cloudrun-tf" {
-  name     = "shop-backend-stripe-mongo2"
+  name     = "shop-backend-stripe-mongo"
   location = var.location_name
 
   template {
