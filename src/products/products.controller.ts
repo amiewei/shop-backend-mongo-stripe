@@ -16,6 +16,7 @@ export class ProductsMongoController {
         private readonly productsMongoService: ProductsMongoService,
         private readonly stripeService: StripeService,
     ) {}
+
     @Post('add')
     async addProductToDB(
         @Body('name') itemName: string,
