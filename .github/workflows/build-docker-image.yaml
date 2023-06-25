@@ -47,6 +47,7 @@ jobs:
               shell: bash
               run: |
                   echo "LAST_COMMIT_SHA=${{ github.event.pull_request.head.sha }}" >> ${GITHUB_ENV}
+
             - name: Setup Environment (Push)
               if: ${{ github.event_name == 'push' }}
               shell: bash
@@ -55,7 +56,7 @@ jobs:
 
             - name: print build tag
               run: |
-                  echo "BUILD_TAG=${LAST_COMMIT_SHA:0:7}" >> $GITHUB_ENV"
+                  echo "BUILD_TAG=${LAST_COMMIT_SHA:0:7}" >> $GITHUB_ENV
 
             - id: docker-push-tagged
               name: Tag Docker image and push to Google Artifact Registry
@@ -64,10 +65,10 @@ jobs:
                   push: true
                   tags: |
                       ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/cloud-run-source-deploy/shop-backend-stripe-mongo-gh-actions:${{ steps.get-tag.outputs.short_ref }}
-                      ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/cloud-run-source-deploy/shop-backend-stripe-mongo-gh-actions:$BUILD_TAG"
+                      ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/cloud-run-source-deploy/shop-backend-stripe-mongo-gh-actions:${BUILD_TAG}"
 
             - name: Print Docker tags
               run: |
                   echo "Docker tags:"
                   echo "${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/cloud-run-source-deploy/shop-backend-stripe-mongo-gh-actions:${{ steps.get-tag.outputs.short_ref }}"
-                  ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/cloud-run-source-deploy/shop-backend-stripe-mongo-gh-actions:$BUILD_TAG"
+                  ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/cloud-run-source-deploy/shop-backend-stripe-mongo-gh-actions:${BUILD_TAG}"
