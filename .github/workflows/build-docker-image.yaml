@@ -42,6 +42,21 @@ jobs:
               id: get-tag
               run: echo ::set-output name=short_ref::${GITHUB_REF#refs/*/}
 
+            - name: Setup Environment (PR)
+              if: ${{ github.event_name == 'pull_request' }}
+              shell: bash
+              run: |
+                  echo "LAST_COMMIT_SHA=${{ github.event.pull_request.head.sha }}" >> ${GITHUB_ENV}
+            - name: Setup Environment (Push)
+              if: ${{ github.event_name == 'push' }}
+              shell: bash
+              run: |
+                  echo "LAST_COMMIT_SHA=${GITHUB_SHA}" >> ${GITHUB_ENV}
+
+            - name: print build tag
+              run: |
+                  echo "BUILD_TAG=${LAST_COMMIT_SHA:0:7}" >> $GITHUB_ENV"
+
             - id: docker-push-tagged
               name: Tag Docker image and push to Google Artifact Registry
               uses: docker/build-push-action@v2
@@ -49,16 +64,10 @@ jobs:
                   push: true
                   tags: |
                       ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/cloud-run-source-deploy/shop-backend-stripe-mongo-gh-actions:${{ steps.get-tag.outputs.short_ref }}
-                      ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/cloud-run-source-deploy/shop-backend-stripe-mongo-gh-actions:latest
-              env:
-                  TAGS: ${{ steps.docker-push-tagged.outputs.tags }}
+                      ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/cloud-run-source-deploy/shop-backend-stripe-mongo-gh-actions:$BUILD_TAG"
 
             - name: Print Docker tags
               run: |
                   echo "Docker tags:"
                   echo "${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/cloud-run-source-deploy/shop-backend-stripe-mongo-gh-actions:${{ steps.get-tag.outputs.short_ref }}"
-                  echo "${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/cloud-run-source-deploy/shop-backend-stripe-mongo-gh-actions:latest"
-
-            - name: Use Docker tags
-              run: |
-                  echo "tags: ${{ env.TAGS }}"
+                  ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/cloud-run-source-deploy/shop-backend-stripe-mongo-gh-actions:$BUILD_TAG"
