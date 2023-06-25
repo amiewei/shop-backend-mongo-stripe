@@ -25,7 +25,7 @@ jobs:
               with:
                   token_format: access_token
                   workload_identity_provider: ${{ vars.GCP_PROVIDER_ID }}
-                  service_account: '${{ vars.GCP_SERVICE_ACOUNT }}@${{ vars.GCP_PROJECT_ID }}.iam.gserviceaccount.com'
+                  service_account: ${{ vars.GCP_SERVICE_ACCOUNT_EMAIL }}
                   access_token_lifetime: 300s
 
             - name: Login to Artifact Registry
