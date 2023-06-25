@@ -50,13 +50,15 @@ jobs:
                   tags: |
                       ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/cloud-run-source-deploy/shop-backend-stripe-mongo-gh-actions:${{ steps.get-tag.outputs.short_ref }}
                       ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/cloud-run-source-deploy/shop-backend-stripe-mongo-gh-actions:latest
+              env:
+                  TAGS: ${{ steps.docker-push-tagged.outputs.tags }}
 
             - name: Print Docker tags
               run: |
                   echo "Docker tags:"
-                  echo "${{ steps.docker-push-tagged.outputs.tags }}"
+                  echo "${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/cloud-run-source-deploy/shop-backend-stripe-mongo-gh-actions:${{ steps.get-tag.outputs.short_ref }}"
+                  echo "${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/cloud-run-source-deploy/shop-backend-stripe-mongo-gh-actions:latest"
 
-            - name: Print First Docker tag
+            - name: Use Docker tags
               run: |
-                  IFS=$'\n' read -d '' -ra tags <<< "${{ steps.docker-push-tagged.outputs.tags }}"
-                  echo "First Docker tag: ${tags[0]}"
+                  echo "tags: ${{ env.TAGS }}"
