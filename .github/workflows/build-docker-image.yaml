@@ -65,10 +65,10 @@ jobs:
                   push: true
                   tags: |
                       ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/cloud-run-source-deploy/shop-backend-stripe-mongo-gh-actions:${{ steps.get-tag.outputs.short_ref }}
-                      ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/cloud-run-source-deploy/shop-backend-stripe-mongo-gh-actions:${BUILD_TAG}"
+                      ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/cloud-run-source-deploy/shop-backend-stripe-mongo-gh-actions:${{ env.BUILD_TAG }}"
 
             - name: Print Docker tags
               run: |
                   echo "Docker tags:"
                   echo "${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/cloud-run-source-deploy/shop-backend-stripe-mongo-gh-actions:${{ steps.get-tag.outputs.short_ref }}"
-                  ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/cloud-run-source-deploy/shop-backend-stripe-mongo-gh-actions:${BUILD_TAG}"
+                  ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/cloud-run-source-deploy/shop-backend-stripe-mongo-gh-actions:${{ env.BUILD_TAG }}"
