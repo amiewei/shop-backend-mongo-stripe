@@ -38,9 +38,9 @@ jobs:
                   username: oauth2accesstoken
                   password: ${{ steps.auth.outputs.access_token }}
 
-            - name: Get tag
-              id: get-tag
-              run: echo ::set-output name=short_ref::${GITHUB_REF#refs/*/}
+            # - name: Get tag
+            #   id: get-tag
+            #   run: echo ::set-output name=short_ref::${GITHUB_REF#refs/*/}
 
             - name: Setup Environment (PR)
               if: ${{ github.event_name == 'pull_request' }}
@@ -64,11 +64,9 @@ jobs:
               with:
                   push: true
                   tags: |
-                      ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/cloud-run-source-deploy/shop-backend-stripe-mongo-gh-actions:${{ steps.get-tag.outputs.short_ref }}
                       ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/cloud-run-source-deploy/shop-backend-stripe-mongo-gh-actions:${{ env.BUILD_TAG }}
 
             - name: Print Docker tags
               run: |
-                  echo "Docker tags:"
-                  echo "${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/cloud-run-source-deploy/shop-backend-stripe-mongo-gh-actions:${{ steps.get-tag.outputs.short_ref }}"
-                  ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/cloud-run-source-deploy/shop-backend-stripe-mongo-gh-actions:${{ env.BUILD_TAG }}
+                  echo "Docker tag:"
+                  echo "${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/cloud-run-source-deploy/shop-backend-stripe-mongo-gh-actions:${{ env.BUILD_TAG }}"
