@@ -2,6 +2,9 @@
 name: Release
 on:
     push:
+        branches:
+            - main
+            - github-action
 
 jobs:
     docker-release:
@@ -31,7 +34,7 @@ jobs:
             - name: Login to Artifact Registry
               uses: docker/login-action@v1
               with:
-                  registry: us-central1-docker.pkg.dev
+                  registry: ${{ vars.GCP_REGION }}-docker.pkg.dev
                   username: oauth2accesstoken
                   password: ${{ steps.auth.outputs.access_token }}
 
@@ -45,5 +48,5 @@ jobs:
               with:
                   push: true
                   tags: |
-                      <your-gar-region>-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/cloud-run-source-deploy/shop-backend-stripe-mongo-gh-actions:${{ steps.get-tag.outputs.short_ref }}
-                      <your-gar-region>-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/cloud-run-source-deploy/shop-backend-stripe-mongo-gh-actions:latest
+                      ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/cloud-run-source-deploy/shop-backend-stripe-mongo-gh-actions:${{ steps.get-tag.outputs.short_ref }}
+                      ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/cloud-run-source-deploy/shop-backend-stripe-mongo-gh-actions:latest
