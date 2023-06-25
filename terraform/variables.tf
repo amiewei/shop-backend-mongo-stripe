@@ -28,6 +28,6 @@ variable "sa_key" {
 }
 
 variable "gcp_project_id" {
-  type        = "omega-branch-385519"
+  type        = string
   description = "gcp project id"
 }
