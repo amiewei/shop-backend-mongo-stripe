@@ -162,3 +162,4 @@ jobs:
 # TFC via github actions
 # https://developer.hashicorp.com/terraform/tutorials/automation/github-actions
 # need terraform to get the variable of image from the tag output
+# added roles/iam.serviceAccountUser to GCP Service Acc
