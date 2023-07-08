@@ -141,7 +141,7 @@ jobs:
                   -var "location_name=us-central1" \
                   -var "domain=https://masterchefgeorgi.ddns.net" \
                   -var "image=${{ needs.docker-release.outputs.IMAGE_URL }}" \
-                  -var "service_name=shop-backend-stripe-mongo" \
+                  -var "service_name=shop-backend-stripe-mongo-gh" \
                   -var "gcp_project_id=omega-branch-385519" \
               env:
                   GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
@@ -155,7 +155,7 @@ jobs:
                   -var "location_name=us-central1" \
                   -var "domain=https://masterchefgeorgi.ddns.net" \
                   -var "image=${{ needs.docker-release.outputs.IMAGE_URL }}" \
-                  -var "service_name=shop-backend-stripe-mongo" \
+                  -var "service_name=shop-backend-stripe-mongo-gh" \
                   -var "gcp_project_id=omega-branch-385519" \
               env:
                   GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
