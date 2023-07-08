@@ -63,22 +63,27 @@ jobs:
             #### Set the Docker image URL as a variable  <added july 1>
             - id: set-image-url
               name: Set image URL variable
-              run: echo "::set-output name=image-url::${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/cloud-run-source-deploy/shop-backend-stripe-mongo-gh-actions:${{ env.BUILD_TAG }}"
+              run: echo "::set-output name=IMAGE_URL::${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/cloud-run-source-deploy/shop-backend-stripe-mongo-gh-actions:${{ env.BUILD_TAG }}"
             #####
+
+            - name: Print Image URL
+              run: |
+                  echo "Image URL: ${{ steps.set-image-url.outputs.IMAGE_URL }}"
+
             - id: docker-push-tagged
               name: Tag Docker image and push to Google Artifact Registry
               uses: docker/build-push-action@v2
               with:
                   push: true
                   tags: |
-                      ${{ steps.set-image-url.outputs.image-url }}
+                      ${{ steps.set-image-url.outputs.IMAGE_URL }}
 
               # tags: ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/cloud-run-source-deploy/shop-backend-stripe-mongo-gh-actions:${{ env.BUILD_TAG }}
 
             - name: Print Docker tags
               run: |
                   echo "Docker tag:"
-                  echo "${{ steps.set-image-url.outputs.image-url }}"
+                  echo "${{ steps.set-image-url.outputs.IMAGE_URL }}"
 
               # echo "${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/cloud-run-source-deploy/shop-backend-stripe-mongo-gh-actions:${{ env.BUILD_TAG }}"
 
