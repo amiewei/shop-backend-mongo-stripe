@@ -3,7 +3,7 @@ name: 'Terraform CI'
 # on: [push, pull_request]
 on:
     workflow_run:
-        workflows: ['build-docker-image.yaml']
+        workflows: ['Build and Push Docker Image']
         types:
             - completed
 
