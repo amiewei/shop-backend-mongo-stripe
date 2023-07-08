@@ -10,7 +10,7 @@ on:
 
 jobs:
     build-docker-image:
-        uses: ./.github/workflows/build-docker-image.yaml@main
+        uses: ./.github/workflows/build-docker-image.yaml
     terraform:
         name: 'Terraform'
         runs-on: ubuntu-latest
