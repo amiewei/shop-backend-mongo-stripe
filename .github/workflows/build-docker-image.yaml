@@ -1,6 +1,7 @@
 # https://gist.github.com/palewire/12c4b2b974ef735d22da7493cf7f4d37
 
-# builds and pushes docker image to the gcp container registry. tags image with the SHA of commit so that the tag change can be picked up by terraform
+# builds and pushes docker image to the gcp container registry.
+# tags image with the SHA of commit so that the tag change can be picked up by terraform
 name: Release
 on:
     push:
