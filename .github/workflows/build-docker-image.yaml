@@ -14,7 +14,7 @@ on:
 
 jobs:
     docker-release:
-        name: Tagged Docker release to Google Artifact Registry
+        name: Build Docker Image and Push to Google Artifact Registry
         runs-on: ubuntu-latest
         # if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
         # <-- Notice that I'm filtering here to only run when a tagged commit is pushed
@@ -93,6 +93,7 @@ jobs:
             IMAGE_URL: ${{ steps.set-image-url.outputs.IMAGE_URL }}
 
     terraform:
+        needs: docker-release
         name: 'Terraform'
         runs-on: ubuntu-latest
 
