@@ -22,10 +22,10 @@ variable "image" {
   description = "The Docker image for the Cloud Run service."
 }
 
-variable "sa_key" {
-  type        = string
-  description = "path name of key"
-}
+# variable "sa_key" {
+#   type        = string
+#   description = "path name of key"
+# }
 
 variable "gcp_project_id" {
   type        = string

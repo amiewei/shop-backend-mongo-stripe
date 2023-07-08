@@ -143,9 +143,8 @@ jobs:
                   -var "image=${{ needs.docker-release.outputs.IMAGE_URL }}" \
                   -var "service_name=shop-backend-stripe-mongo" \
                   -var "gcp_project_id=omega-branch-385519" \
-                  -var "sa_key=${{ secrets.GOOGLE_CREDENTIALS }}"
-              # env:
-              #     GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+              env:
+                  GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
 
               # On push to main, build or change infrastructure according to Terraform configuration files
               # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
@@ -158,10 +157,8 @@ jobs:
                   -var "image=${{ needs.docker-release.outputs.IMAGE_URL }}" \
                   -var "service_name=shop-backend-stripe-mongo" \
                   -var "gcp_project_id=omega-branch-385519" \
-                  -var "sa_key=${{ secrets.GOOGLE_CREDENTIALS }}"
-              # env:
-              #     GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
-
+              env:
+                  GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
 # TFC via github actions
 # https://developer.hashicorp.com/terraform/tutorials/automation/github-actions
 # need terraform to get the variable of image from the tag output
