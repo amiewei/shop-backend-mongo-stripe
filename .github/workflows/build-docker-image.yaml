@@ -3,11 +3,7 @@
 # builds and pushes docker image to the gcp container registry.
 # tags image with the SHA of commit so that the tag change can be picked up by terraform
 name: Build and Push Docker Image
-on:
-    push:
-        # branches:
-        #     - main
-        #     - github-action
+on: [push, pull_request]
 
 jobs:
     docker-release:
@@ -18,6 +14,7 @@ jobs:
         # git commit -am 'commit message'
         # git tag -a v1.0.0 -m 'release docker image initial'
         # git push --tags
+        # tags are not working with building docker image and pushing
 
         permissions:
             contents: 'read'

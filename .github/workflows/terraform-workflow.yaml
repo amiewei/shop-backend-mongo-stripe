@@ -6,8 +6,11 @@ on:
         workflows: ['Build and Push Docker Image']
         types:
             - completed
+    workflow_dispatch:
 
 jobs:
+    build-docker-image:
+        uses: ./build-docker-image.yaml
     terraform:
         name: 'Terraform'
         runs-on: ubuntu-latest
@@ -40,20 +43,35 @@ jobs:
                   cd terraform
                   terraform fmt -check
 
+            - name: Echo image URL
+              run: |
+                  echo "Image URL: ${{ needs.build-docker-image.outputs.IMAGE_URL }}"
+
             # Generates an execution plan for Terraform
             - name: Terraform Plan
               run: |
                   cd terraform
-                  terraform plan -var "image_url=${{ needs.build-docker-image.outputs.image-url }}"
+                  terraform plan \
+                  -var "location_name=us-central1" \
+                  -var "domain=https://masterchefgeorgi.ddns.net" \
+                  -var "image_url=${{ needs.build-docker-image.outputs.IMAGE_URL }}" \
+                  -var "service_name=shop-backend-stripe-mongo" \
+                  -var "gcp_project_id=omega-branch-385519"
               env:
                   GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
 
               # On push to main, build or change infrastructure according to Terraform configuration files
               # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
             - name: Terraform Apply
-              if: github.ref == 'refs/heads/main' && github.event_name == 'push'
               run: |
                   cd terraform 
-                  terraform apply -auto-approve -var "image_url=${{ needs.build-docker-image.outputs.image-url }}"
+                  terraform apply --auto-approve \
+                  -var "location_name=us-central1" \
+                  -var "domain=https://masterchefgeorgi.ddns.net" \
+                  -var "image_url=${{ needs.build-docker-image.outputs.IMAGE_URL }}" \
+                  -var "service_name=shop-backend-stripe-mongo" \
+                  -var "gcp_project_id=omega-branch-385519"
               env:
                   GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+#reuseable workflow github actions
+#   https://stackoverflow.com/questions/73702333/github-actions-reuse-outputs-from-other-reusable-workflows
