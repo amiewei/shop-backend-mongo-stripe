@@ -5,6 +5,8 @@ Backend NestJs built to handle fetching product info from mongoDB and connect wi
 [create service account]
 gcloud iam service-accounts create sa-terraform
 
+test
+
 [add role bindings]
 
 2. to build container image:
