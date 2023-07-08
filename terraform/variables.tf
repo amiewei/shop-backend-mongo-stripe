@@ -25,6 +25,7 @@ variable "image" {
 variable "mongo_user" {
   type        = string
   description = "Mongo User"
+  default     = "admin"
 }
 
 # variable "sa_key" {
