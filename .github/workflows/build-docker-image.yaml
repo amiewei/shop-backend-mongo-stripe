@@ -67,7 +67,7 @@ jobs:
             #### Set the Docker image URL as a variable  <added july 1>
             - id: set-image-url
               name: Set image URL variable
-              run: echo "IMAGE_URL=${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/cloud-run-source-deploy/shop-backend-stripe-mongo-gh-actions:${{ env.BUILD_TAG }}" >> $GITHUB_OUTPUT"
+              run: echo "IMAGE_URL=${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/cloud-run-source-deploy/shop-backend-stripe-mongo-gh-actions:${{ env.BUILD_TAG }}" >> $GITHUB_OUTPUT
 
               # run: echo "::set-output name=IMAGE_URL::${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/cloud-run-source-deploy/shop-backend-stripe-mongo-gh-actions:${{ env.BUILD_TAG }}"
               #####
