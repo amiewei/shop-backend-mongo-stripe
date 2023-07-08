@@ -1,85 +1,85 @@
-name: 'Terraform CI'
+# name: 'Terraform CI'
 
-# on: [push, pull_request]
-on:
-    workflow_run:
-        workflows: ['Build and Push Docker Image']
-        types:
-            - completed
-    # workflow_dispatch:
+# # on: [push, pull_request]
+# on:
+#     workflow_run:
+#         workflows: ['Build and Push Docker Image']
+#         types:
+#             - completed
+#     # workflow_dispatch:
 
-jobs:
-    build-docker-image:
-        uses: ./.github/workflows/build-docker-image.yaml
+# jobs:
+#     build-docker-image:
+#         uses: ./.github/workflows/build-docker-image.yaml
 
-        permissions:
-            contents: 'read'
-            id-token: 'write'
-    terraform:
-        name: 'Terraform'
-        runs-on: ubuntu-latest
+#         permissions:
+#             contents: 'read'
+#             id-token: 'write'
+#     terraform:
+#         name: 'Terraform'
+#         runs-on: ubuntu-latest
 
-        permissions:
-            contents: 'read'
-            id-token: 'write'
+#         permissions:
+#             contents: 'read'
+#             id-token: 'write'
 
-        # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
-        defaults:
-            run:
-                shell: bash
+#         # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+#         defaults:
+#             run:
+#                 shell: bash
 
-        steps:
-            # Checkout the repository to the GitHub Actions runner
-            - name: Checkout
-              uses: actions/checkout@v2
+#         steps:
+#             # Checkout the repository to the GitHub Actions runner
+#             - name: Checkout
+#               uses: actions/checkout@v2
 
-            # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
-            - name: Setup Terraform
-              uses: hashicorp/setup-terraform@v1
+#             # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
+#             - name: Setup Terraform
+#               uses: hashicorp/setup-terraform@v1
 
-            # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
-            - name: Terraform Init
-              run: |
-                  cd terraform
-                  terraform init
-              env:
-                  GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+#             # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+#             - name: Terraform Init
+#               run: |
+#                   cd terraform
+#                   terraform init
+#               env:
+#                   GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
 
-            # Checks that all Terraform configuration files adhere to a canonical format
-            - name: Terraform Format
-              run: |
-                  cd terraform
-                  terraform fmt -check
+#             # Checks that all Terraform configuration files adhere to a canonical format
+#             - name: Terraform Format
+#               run: |
+#                   cd terraform
+#                   terraform fmt -check
 
-            - name: Echo image URL
-              run: |
-                  echo "Image URL: ${{ needs.build-docker-image.outputs.IMAGE_URL }}"
+#             - name: Echo image URL
+#               run: |
+#                   echo "Image URL: ${{ needs.build-docker-image.outputs.IMAGE_URL }}"
 
-            # Generates an execution plan for Terraform
-            - name: Terraform Plan
-              run: |
-                  cd terraform
-                  terraform plan \
-                  -var "location_name=us-central1" \
-                  -var "domain=https://masterchefgeorgi.ddns.net" \
-                  -var "image_url=${{ needs.build-docker-image.outputs.IMAGE_URL }}" \
-                  -var "service_name=shop-backend-stripe-mongo" \
-                  -var "gcp_project_id=omega-branch-385519"
-              env:
-                  GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+#             # Generates an execution plan for Terraform
+#             - name: Terraform Plan
+#               run: |
+#                   cd terraform
+#                   terraform plan \
+#                   -var "location_name=us-central1" \
+#                   -var "domain=https://masterchefgeorgi.ddns.net" \
+#                   -var "image_url=${{ needs.build-docker-image.outputs.IMAGE_URL }}" \
+#                   -var "service_name=shop-backend-stripe-mongo" \
+#                   -var "gcp_project_id=omega-branch-385519"
+#               env:
+#                   GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
 
-              # On push to main, build or change infrastructure according to Terraform configuration files
-              # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
-            - name: Terraform Apply
-              run: |
-                  cd terraform 
-                  terraform apply --auto-approve \
-                  -var "location_name=us-central1" \
-                  -var "domain=https://masterchefgeorgi.ddns.net" \
-                  -var "image_url=${{ needs.build-docker-image.outputs.IMAGE_URL }}" \
-                  -var "service_name=shop-backend-stripe-mongo" \
-                  -var "gcp_project_id=omega-branch-385519"
-              env:
-                  GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
-#reuseable workflow github actions
-#   https://stackoverflow.com/questions/73702333/github-actions-reuse-outputs-from-other-reusable-workflows
+#               # On push to main, build or change infrastructure according to Terraform configuration files
+#               # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
+#             - name: Terraform Apply
+#               run: |
+#                   cd terraform
+#                   terraform apply --auto-approve \
+#                   -var "location_name=us-central1" \
+#                   -var "domain=https://masterchefgeorgi.ddns.net" \
+#                   -var "image_url=${{ needs.build-docker-image.outputs.IMAGE_URL }}" \
+#                   -var "service_name=shop-backend-stripe-mongo" \
+#                   -var "gcp_project_id=omega-branch-385519"
+#               env:
+#                   GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+# #reuseable workflow github actions
+# #   https://stackoverflow.com/questions/73702333/github-actions-reuse-outputs-from-other-reusable-workflows
