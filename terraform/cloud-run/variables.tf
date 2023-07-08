@@ -1,7 +1,6 @@
 variable "service_name" {
   type        = string
   description = "name of the cloud run service"
-  default     = "shop-backend-cloud-run"
 }
 
 variable "domain" {

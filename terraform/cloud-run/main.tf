@@ -14,7 +14,7 @@ resource "google_cloud_run_v2_service" "cloudrun-tf" {
         name = "STRIPE_API_KEY"
         value_source {
           secret_key_ref {
-            secret  = "SHOP_STRIPE_API_KEY"
+            secret  = "STRIPE_API_KEY"
             version = "1"
           }
         }
