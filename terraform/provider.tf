@@ -1,3 +1,9 @@
+terraform {
+  backend "gcs" {
+    bucket = "terraform-state-cicdproject"
+    prefix = "prod"
+  }
+}
 provider "google" {
   # Configuration options
   project = var.gcp_project_id
