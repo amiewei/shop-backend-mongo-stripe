@@ -20,22 +20,12 @@ resource "google_cloud_run_v2_service" "cloudrun-tf" {
         }
       }
       env {
-        name = "VAULT_ROLE_ID"
-        value_source {
-          secret_key_ref {
-            secret  = "VAULT_ROLE_ID"
-            version = "1"
-          }
-        }
+        name  = "MONGO_USER"
+        value = var.mongo_user
       }
       env {
-        name = "VAULT_SECRET_ID"
-        value_source {
-          secret_key_ref {
-            secret  = "VAULT_SECRET_ID"
-            version = "1"
-          }
-        }
+        name  = "MONGO_PW"
+        value = ""
       }
     }
   }

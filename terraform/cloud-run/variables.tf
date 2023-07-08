@@ -19,3 +19,8 @@ variable "location_name" {
   description = "Location of services"
 }
 
+variable "mongo_user" {
+  description = "mongodb user"
+  default     = "admin"
+}
+

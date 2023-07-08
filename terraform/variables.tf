@@ -22,6 +22,11 @@ variable "image" {
   description = "The Docker image for the Cloud Run service."
 }
 
+variable "mongo_user" {
+  type        = string
+  description = "Mongo User"
+}
+
 # variable "sa_key" {
 #   type        = string
 #   description = "path name of key"
