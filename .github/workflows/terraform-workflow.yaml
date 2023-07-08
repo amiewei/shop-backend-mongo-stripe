@@ -1,6 +1,11 @@
 name: 'Terraform CI'
 
-on: [push, pull_request]
+# on: [push, pull_request]
+on:
+    workflow_run:
+        workflows: ['build-docker-image.yaml']
+        types:
+            - completed
 
 jobs:
     terraform:
@@ -39,7 +44,7 @@ jobs:
             - name: Terraform Plan
               run: |
                   cd terraform
-                  terraform plan
+                  terraform plan -var "image_url=${{ needs.build-docker-image.outputs.image-url }}"
               env:
                   GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
 
@@ -49,6 +54,6 @@ jobs:
               if: github.ref == 'refs/heads/main' && github.event_name == 'push'
               run: |
                   cd terraform 
-                  terraform apply -auto-approve
+                  terraform apply -auto-approve -var "image_url=${{ needs.build-docker-image.outputs.image-url }}"
               env:
                   GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
