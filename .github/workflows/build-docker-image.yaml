@@ -3,7 +3,14 @@
 # builds and pushes docker image to the gcp container registry.
 # tags image with the SHA of commit so that the tag change can be picked up by terraform
 name: Build and Push Docker Image
-on: [push, pull_request]
+on:
+    push:
+    pull_request:
+    workflow_call:
+        outputs:
+            IMAGE_URL:
+                description: 'Docker Image URL from GCP Artifact Registry'
+                value: ${{ jobs.docker-release.set-image-url.outputs.IMAGE_URL }}
 
 jobs:
     docker-release:
