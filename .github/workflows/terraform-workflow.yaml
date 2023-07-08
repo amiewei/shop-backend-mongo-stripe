@@ -6,11 +6,11 @@ on:
         workflows: ['Build and Push Docker Image']
         types:
             - completed
-    workflow_dispatch:
+    # workflow_dispatch:
 
 jobs:
     build-docker-image:
-        uses: ./build-docker-image.yaml
+        uses: ./github/workflows/build-docker-image.yaml@main
     terraform:
         name: 'Terraform'
         runs-on: ubuntu-latest
