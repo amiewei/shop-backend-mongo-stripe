@@ -3,6 +3,7 @@ module "cloud-run" {
 
   location_name = var.location_name
   image         = var.image
+  service_name  = var.service_name
 }
 
 module "cloud-scheduler" {
