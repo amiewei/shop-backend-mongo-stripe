@@ -83,3 +83,28 @@
 #                   GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
 # #reuseable workflow github actions
 # #   https://stackoverflow.com/questions/73702333/github-actions-reuse-outputs-from-other-reusable-workflows
+
+name: Terraform Destroy
+
+on:
+    push:
+        branches:
+            - main
+
+jobs:
+    destroy:
+        name: Destroy Infrastructure
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout Repository
+              uses: actions/checkout@v2
+
+            - name: Set Up Terraform
+              uses: hashicorp/setup-terraform@v1
+
+            - name: Terraform Init
+              run: terraform init
+
+            - name: Terraform Destroy
+              run: terraform destroy --auto-approve
