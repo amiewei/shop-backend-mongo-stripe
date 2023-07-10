@@ -147,6 +147,8 @@ jobs:
                   -var "image=${{ needs.docker-release.outputs.IMAGE_URL }}" \
                   -var "service_name=shop-backend-stripe-mongo-gh" \
                   -var "gcp_project_id=omega-branch-385519" \
+                  -var "mongo_user=${{ secrets.MONGO_USER }}" \
+                  -var "mongo_pw=${{ secrets.MONGO_PW }}"
               env:
                   GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
 
@@ -161,6 +163,8 @@ jobs:
                   -var "image=${{ needs.docker-release.outputs.IMAGE_URL }}" \
                   -var "service_name=shop-backend-stripe-mongo-gh" \
                   -var "gcp_project_id=omega-branch-385519" \
+                  -var "mongo_user=${{ secrets.MONGO_USER }}" \
+                  -var "mongo_pw=${{ secrets.MONGO_PW }}"
               env:
                   GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
 # TFC via github actions

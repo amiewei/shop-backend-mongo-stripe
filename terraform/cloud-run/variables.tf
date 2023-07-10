@@ -20,6 +20,9 @@ variable "location_name" {
 
 variable "mongo_user" {
   description = "mongodb user"
-  default     = "admin"
+}
+
+variable "mongo_pw" {
+  description = "mongodb pw"
 }
 

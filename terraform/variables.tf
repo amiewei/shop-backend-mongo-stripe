@@ -22,10 +22,15 @@ variable "image" {
   description = "The Docker image for the Cloud Run service."
 }
 
+
 variable "mongo_user" {
   type        = string
-  description = "Mongo User"
-  default     = "admin"
+  description = "mongodb user"
+}
+
+variable "mongo_pw" {
+  type        = string
+  description = "mongodb pw"
 }
 
 # variable "sa_key" {

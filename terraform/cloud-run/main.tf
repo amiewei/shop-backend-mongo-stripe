@@ -25,7 +25,7 @@ resource "google_cloud_run_v2_service" "cloudrun-tf" {
       }
       env {
         name  = "MONGO_PW"
-        value = ""
+        value = var.mongo_pw
       }
     }
   }
