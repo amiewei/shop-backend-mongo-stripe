@@ -148,7 +148,8 @@ jobs:
                   -var "service_name=shop-backend-stripe-mongo-gh" \
                   -var "gcp_project_id=omega-branch-385519" \
                   -var "mongo_user=$MONGO_USER" \
-                  -var "mongo_pw=$MONGO_PW"
+                  -var "mongo_pw=$MONGO_PW" \
+                  echo "$MONGO_USER"
               env:
                   GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
                   MONGO_USER: ${{ secrets.MONGO_USER }}
