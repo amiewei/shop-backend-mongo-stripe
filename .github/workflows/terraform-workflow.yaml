@@ -95,9 +95,15 @@ jobs:
         runs-on: ubuntu-latest
         env:
             GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+
         defaults:
             run:
                 working-directory: terraform
+                shell: bash
+
+        permissions:
+            contents: 'read'
+            id-token: 'write'
 
         steps:
             - name: Checkout Repository
@@ -111,15 +117,10 @@ jobs:
 
             - name: Terraform State List
               run: terraform state list
-            #   env:
-            #       GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+
             - name: Show Destroy plan
               run: terraform plan -destroy
               continue-on-error: true
-              # env:
-              #     GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
 
             - name: Terraform Destroy
               run: terraform destroy --auto-approve
-              # env:
-              #     GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}

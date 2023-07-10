@@ -1,183 +1,181 @@
-# # https://gist.github.com/palewire/12c4b2b974ef735d22da7493cf7f4d37
+# https://gist.github.com/palewire/12c4b2b974ef735d22da7493cf7f4d37
 
-# # builds and pushes docker image to the gcp container registry.
-# # tags image with the SHA of commit so that the tag change can be picked up by terraform
-# name: Build and Push Docker Image
-# on:
-#     push:
-#     pull_request:
-#     # workflow_call:
-#     #     outputs:
-#     #         IMAGE_URL:
-#     #             description: 'Docker Image URL from GCP Artifact Registry'
-#     #             value: ${{ jobs.docker-release.set-image-url.outputs.IMAGE_URL }}
+# builds and pushes docker image to the gcp container registry.
+# tags image with the SHA of commit so that the tag change can be picked up by terraform
+name: Build and Push Docker Image
+on:
+    push:
+    pull_request:
+    # workflow_call:
+    #     outputs:
+    #         IMAGE_URL:
+    #             description: 'Docker Image URL from GCP Artifact Registry'
+    #             value: ${{ jobs.docker-release.set-image-url.outputs.IMAGE_URL }}
 
-# jobs:
-#     docker-release:
-#         name: Build Docker Image and Push to Google Artifact Registry
-#         runs-on: ubuntu-latest
-#         # if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
-#         # <-- Notice that I'm filtering here to only run when a tagged commit is pushed
-#         # git commit -am 'commit message'
-#         # git tag -a v1.0.0 -m 'release docker image initial'
-#         # git push --tags
-#         # tags are not working with building docker image and pushing
+jobs:
+    docker-release:
+        name: Build Docker Image and Push to Google Artifact Registry
+        runs-on: ubuntu-latest
+        # if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
+        # <-- Notice that I'm filtering here to only run when a tagged commit is pushed
+        # git commit -am 'commit message'
+        # git tag -a v1.0.0 -m 'release docker image initial'
+        # git push --tags
+        # tags are not working with building docker image and pushing
 
-#         permissions:
-#             contents: 'read'
-#             id-token: 'write'
+        permissions:
+            contents: 'read'
+            id-token: 'write'
 
-#         steps:
-#             - name: hello
-#               run: |
-#                   echo "hello"
-#             # - id: checkout
-#             #   name: Checkout
-#             #   uses: actions/checkout@v2
+        steps:
+            - name: hello
+              run: |
+                  echo "hello"
+            # - id: checkout
+            #   name: Checkout
+            #   uses: actions/checkout@v2
 
-#         #     - id: auth
-#         #       name: Authenticate with Google Cloud
-#         #       uses: google-github-actions/auth@v0
-#         #       with:
-#         #           token_format: access_token
-#         #           workload_identity_provider: ${{ vars.GCP_PROVIDER_ID }}
-#         #           service_account: ${{ vars.GCP_SERVICE_ACCOUNT_EMAIL }}
-#         #           access_token_lifetime: 300s
+        #     - id: auth
+        #       name: Authenticate with Google Cloud
+        #       uses: google-github-actions/auth@v0
+        #       with:
+        #           token_format: access_token
+        #           workload_identity_provider: ${{ vars.GCP_PROVIDER_ID }}
+        #           service_account: ${{ vars.GCP_SERVICE_ACCOUNT_EMAIL }}
+        #           access_token_lifetime: 300s
 
-#         #     - name: Login to Artifact Registry
-#         #       uses: docker/login-action@v1
-#         #       with:
-#         #           registry: ${{ vars.GCP_REGION }}-docker.pkg.dev
-#         #           username: oauth2accesstoken
-#         #           password: ${{ steps.auth.outputs.access_token }}
+        #     - name: Login to Artifact Registry
+        #       uses: docker/login-action@v1
+        #       with:
+        #           registry: ${{ vars.GCP_REGION }}-docker.pkg.dev
+        #           username: oauth2accesstoken
+        #           password: ${{ steps.auth.outputs.access_token }}
 
-#         #     - name: Setup Environment (PR)
-#         #       if: ${{ github.event_name == 'pull_request' }}
-#         #       shell: bash
-#         #       run: |
-#         #           echo "LAST_COMMIT_SHA=${{ github.event.pull_request.head.sha }}" >> ${GITHUB_ENV}
+        #     - name: Setup Environment (PR)
+        #       if: ${{ github.event_name == 'pull_request' }}
+        #       shell: bash
+        #       run: |
+        #           echo "LAST_COMMIT_SHA=${{ github.event.pull_request.head.sha }}" >> ${GITHUB_ENV}
 
-#         #     - name: Setup Environment (Push)
-#         #       if: ${{ github.event_name == 'push' }}
-#         #       shell: bash
-#         #       run: |
-#         #           echo "LAST_COMMIT_SHA=${GITHUB_SHA}" >> ${GITHUB_ENV}
+        #     - name: Setup Environment (Push)
+        #       if: ${{ github.event_name == 'push' }}
+        #       shell: bash
+        #       run: |
+        #           echo "LAST_COMMIT_SHA=${GITHUB_SHA}" >> ${GITHUB_ENV}
 
-#         #     - name: print build tag
-#         #       run: |
-#         #           echo "BUILD_TAG=${LAST_COMMIT_SHA:0:7}" >> $GITHUB_ENV
+        #     - name: print build tag
+        #       run: |
+        #           echo "BUILD_TAG=${LAST_COMMIT_SHA:0:7}" >> $GITHUB_ENV
 
-#         #     #### Set the Docker image URL as a variable  <added july 1>
-#         #     - id: set-image-url
-#         #       name: Set image URL variable
-#         #       run: echo "IMAGE_URL=${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/cloud-run-source-deploy/shop-backend-stripe-mongo-gh-actions:${{ env.BUILD_TAG }}" >> $GITHUB_OUTPUT
-#         #       #####
+        #     #### Set the Docker image URL as a variable  <added july 1>
+        #     - id: set-image-url
+        #       name: Set image URL variable
+        #       run: echo "IMAGE_URL=${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/cloud-run-source-deploy/shop-backend-stripe-mongo-gh-actions:${{ env.BUILD_TAG }}" >> $GITHUB_OUTPUT
+        #       #####
 
-#         #     - name: Print Image URL
-#         #       run: |
-#         #           echo "Image URL: ${{ steps.set-image-url.outputs.IMAGE_URL }}"
+        #     - name: Print Image URL
+        #       run: |
+        #           echo "Image URL: ${{ steps.set-image-url.outputs.IMAGE_URL }}"
 
-#         #     - id: docker-push-tagged
-#         #       name: Tag Docker image and push to Google Artifact Registry
-#         #       uses: docker/build-push-action@v2
-#         #       with:
-#         #           push: true
-#         #           tags: |
-#         #               ${{ steps.set-image-url.outputs.IMAGE_URL }}
+        #     - id: docker-push-tagged
+        #       name: Tag Docker image and push to Google Artifact Registry
+        #       uses: docker/build-push-action@v2
+        #       with:
+        #           push: true
+        #           tags: |
+        #               ${{ steps.set-image-url.outputs.IMAGE_URL }}
 
-#         #     - name: Print Docker tags
-#         #       run: |
-#         #           echo "Docker tag:"
-#         #           echo "${{ steps.set-image-url.outputs.IMAGE_URL }}"
+        #     - name: Print Docker tags
+        #       run: |
+        #           echo "Docker tag:"
+        #           echo "${{ steps.set-image-url.outputs.IMAGE_URL }}"
 
-#         #       # echo "${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/cloud-run-source-deploy/shop-backend-stripe-mongo-gh-actions:${{ env.BUILD_TAG }}"
+        #       # echo "${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/cloud-run-source-deploy/shop-backend-stripe-mongo-gh-actions:${{ env.BUILD_TAG }}"
 
-#         outputs:
-#             # IMAGE_URL: ${{ steps.set-image-url.outputs.IMAGE_URL }}
-#             IMAGE_URL: 'us-central1-docker.pkg.dev/omega-branch-385519/cloud-run-source-deploy/shop-backend-stripe-mongo-gh-actions:7b455b6'
+        outputs:
+            # IMAGE_URL: ${{ steps.set-image-url.outputs.IMAGE_URL }}
+            IMAGE_URL: 'us-central1-docker.pkg.dev/omega-branch-385519/cloud-run-source-deploy/shop-backend-stripe-mongo-gh-actions:7b455b6'
 
-#     terraform:
-#         needs: docker-release
-#         name: 'Terraform'
-#         runs-on: ubuntu-latest
+    terraform:
+        needs: docker-release
+        name: 'Terraform'
+        runs-on: ubuntu-latest
+        env:
+            GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+            MONGO_USER: ${{ secrets.MONGO_USER }}
+            MONGO_PW: ${{ secrets.MONGO_PW }}
 
-#         permissions:
-#             contents: 'read'
-#             id-token: 'write'
+        defaults:
+            run:
+                working-directory: terraform
+                shell: bash
 
-#         # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
-#         defaults:
-#             run:
-#                 shell: bash
+        permissions:
+            contents: 'read'
+            id-token: 'write'
 
-#         steps:
-#             # Checkout the repository to the GitHub Actions runner
-#             - name: Checkout
-#               uses: actions/checkout@v2
+        steps:
+            # Checkout the repository to the GitHub Actions runner
+            - name: Checkout
+              uses: actions/checkout@v2
 
-#             # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
-#             - name: Setup Terraform
-#               uses: hashicorp/setup-terraform@v1
+            # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
+            - name: Setup Terraform
+              uses: hashicorp/setup-terraform@v1
 
-#             # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
-#             - name: Terraform Init
-#               run: |
-#                   cd terraform
-#                   terraform init
-#               env:
-#                   GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+            # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+            - name: Terraform Init
+              run: terraform init
 
-#             # Checks that all Terraform configuration files adhere to a canonical format
-#             - name: Terraform Format
-#               run: |
-#                   cd terraform
-#                   terraform fmt -check
+            # Checks that all Terraform configuration files adhere to a canonical format
+            - name: Terraform Format
+              run: terraform fmt -check
 
-#             - name: Echo image URL
-#               run: |
-#                   echo "Image URL: ${{ needs.docker-release.outputs.IMAGE_URL }}"
+            - name: Echo image URL
+              run: |
+                  echo "Image URL: ${{ needs.docker-release.outputs.IMAGE_URL }}"
 
-#             - name: Echo Mongo
-#               run: |
-#                   echo "MONGO: mongo_user=$MONGO_USER"
-#               env:
-#                   MONGO_USER: ${{ secrets.MONGO_USER }}
+            # Generates an execution plan for Terraform
+            - name: Terraform Plan
+              run: |
+                  cd terraform
+                  terraform plan \
+                  -var "location_name=us-central1" \
+                  -var "domain=https://masterchefgeorgi.ddns.net" \
+                  -var "image=${{ needs.docker-release.outputs.IMAGE_URL }}" \
+                  -var "service_name=shop-backend-stripe-mongo-gh" \
+                  -var "gcp_project_id=omega-branch-385519" \
+                  -var "mongo_user=$MONGO_USER" \
+                  -var "mongo_pw=$MONGO_PW" \
 
-#             # Generates an execution plan for Terraform
-#             - name: Terraform Plan
-#               run: |
-#                   cd terraform
-#                   terraform plan \
-#                   -var "location_name=us-central1" \
-#                   -var "domain=https://masterchefgeorgi.ddns.net" \
-#                   -var "image=${{ needs.docker-release.outputs.IMAGE_URL }}" \
-#                   -var "service_name=shop-backend-stripe-mongo-gh" \
-#                   -var "gcp_project_id=omega-branch-385519" \
-#                   -var "mongo_user=$MONGO_USER" \
-#                   -var "mongo_pw=$MONGO_PW" \
-#               env:
-#                   GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
-#                   MONGO_USER: ${{ secrets.MONGO_USER }}
-#                   MONGO_PW: ${{ secrets.MONGO_PW }}
+              # On push to main, build or change infrastructure according to Terraform configuration files
+              # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
+            - name: Terraform Apply
+              run: |
+                  cd terraform
+                  terraform apply --auto-approve \
+                  -var "location_name=us-central1" \
+                  -var "domain=https://masterchefgeorgi.ddns.net" \
+                  -var "image=${{ needs.docker-release.outputs.IMAGE_URL }}" \
+                  -var "service_name=shop-backend-stripe-mongo-gh" \
+                  -var "gcp_project_id=omega-branch-385519" \
+                  -var "mongo_user=$MONGO_USER" \
+                  -var "mongo_pw=$MONGO_PW"
+            #   env:
+            #       GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+            #       MONGO_USER: ${{ secrets.MONGO_USER }}
+            #       MONGO_PW: ${{ secrets.MONGO_PW }}
 
-#               # On push to main, build or change infrastructure according to Terraform configuration files
-#               # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
-#             - name: Terraform Apply
-#               run: |
-#                   cd terraform
-#                   terraform apply --auto-approve \
-#                   -var "location_name=us-central1" \
-#                   -var "domain=https://masterchefgeorgi.ddns.net" \
-#                   -var "image=${{ needs.docker-release.outputs.IMAGE_URL }}" \
-#                   -var "service_name=shop-backend-stripe-mongo-gh" \
-#                   -var "gcp_project_id=omega-branch-385519" \
-#                   -var "mongo_user=$MONGO_USER" \
-#                   -var "mongo_pw=$MONGO_PW"
-#               env:
-#                   GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
-#                   MONGO_USER: ${{ secrets.MONGO_USER }}
-#                   MONGO_PW: ${{ secrets.MONGO_PW }}
-# # TFC via github actions
-# # https://developer.hashicorp.com/terraform/tutorials/automation/github-actions
-# # need terraform to get the variable of image from the tag output
-# # added roles/iam.serviceAccountUser to GCP Service Acc
+            - name: Terraform State List
+              run: terraform state list
+
+            # - name: Show Destroy plan
+            #   run: terraform plan -destroy
+            #   continue-on-error: true
+
+            # - name: Terraform Destroy
+            #   run: terraform destroy --auto-approve
+# TFC via github actions
+# https://developer.hashicorp.com/terraform/tutorials/automation/github-actions
+# need terraform to get the variable of image from the tag output
+# added roles/iam.serviceAccountUser to GCP Service Acc

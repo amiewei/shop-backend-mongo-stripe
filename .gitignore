@@ -39,3 +39,4 @@ TODO.md
 deprecated-sa-key.json
 sa-key.json
 cloudbuild.yaml
+**/.terraform
