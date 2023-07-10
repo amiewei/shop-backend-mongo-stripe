@@ -137,6 +137,12 @@ jobs:
               run: |
                   echo "Image URL: ${{ needs.docker-release.outputs.IMAGE_URL }}"
 
+            - name: Echo Mongo
+              run: |
+                  echo "MONGO: mongo_user=$MONGO_USER"
+              env:
+                  MONGO_PW: ${{ secrets.MONGO_USER }}
+
             # Generates an execution plan for Terraform
             - name: Terraform Plan
               run: |
@@ -149,7 +155,6 @@ jobs:
                   -var "gcp_project_id=omega-branch-385519" \
                   -var "mongo_user=$MONGO_USER" \
                   -var "mongo_pw=$MONGO_PW" \
-                  echo "$MONGO_USER"
               env:
                   GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
                   MONGO_USER: ${{ secrets.MONGO_USER }}
