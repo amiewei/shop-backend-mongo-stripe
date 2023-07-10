@@ -84,17 +84,17 @@
 # #reuseable workflow github actions
 # #   https://stackoverflow.com/questions/73702333/github-actions-reuse-outputs-from-other-reusable-workflows
 
-name: Terraform Destroy
+name: Manually Triggered Terraform Destroy
 
 on:
-    push:
-        branches:
-            - main
+    workflow_dispatch:
 
 jobs:
-    destroy:
+    tf-destroy:
         name: Destroy Infrastructure
         runs-on: ubuntu-latest
+        env:
+            GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
 
         steps:
             - name: Checkout Repository
@@ -107,12 +107,15 @@ jobs:
               run: |
                   cd terraform
                   terraform init
-              env:
-                  GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+            #   env:
+            #       GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+            - name: Show Destroy plan
+              run: terraform plan -destroy
+              continue-on-error: true
 
             - name: Terraform Destroy
               run: |
                   cd terraform
                   terraform destroy --auto-approve
-              env:
-                  GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+            #   env:
+            #       GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
