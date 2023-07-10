@@ -104,9 +104,15 @@ jobs:
               uses: hashicorp/setup-terraform@v1
 
             - name: Terraform Init
-              run: terraform init
+              run: |
+                  cd terraform
+                  terraform init
               env:
                   GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
 
             - name: Terraform Destroy
-              run: terraform destroy --auto-approve
+              run: |
+                  cd terraform
+                  terraform destroy --auto-approve
+              env:
+                  GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
