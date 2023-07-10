@@ -147,10 +147,12 @@ jobs:
                   -var "image=${{ needs.docker-release.outputs.IMAGE_URL }}" \
                   -var "service_name=shop-backend-stripe-mongo-gh" \
                   -var "gcp_project_id=omega-branch-385519" \
-                  -var "mongo_user=${{ secrets.MONGO_USER }}" \
-                  -var "mongo_pw=${{ secrets.MONGO_PW }}"
+                  -var "mongo_user=$MONGO_USER" \
+                  -var "mongo_pw=$MONGO_PW"
               env:
                   GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+                  MONGO_USER: ${{ secrets.MONGO_USER }}
+                  MONGO_PW: ${{ secrets.MONGO_PW }}
 
               # On push to main, build or change infrastructure according to Terraform configuration files
               # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
@@ -163,10 +165,12 @@ jobs:
                   -var "image=${{ needs.docker-release.outputs.IMAGE_URL }}" \
                   -var "service_name=shop-backend-stripe-mongo-gh" \
                   -var "gcp_project_id=omega-branch-385519" \
-                  -var "mongo_user=${{ secrets.MONGO_USER }}" \
-                  -var "mongo_pw=${{ secrets.MONGO_PW }}"
+                  -var "mongo_user=$MONGO_USER" \
+                  -var "mongo_pw=$MONGO_PW"
               env:
                   GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+                  MONGO_USER: ${{ secrets.MONGO_USER }}
+                  MONGO_PW: ${{ secrets.MONGO_PW }}
 # TFC via github actions
 # https://developer.hashicorp.com/terraform/tutorials/automation/github-actions
 # need terraform to get the variable of image from the tag output
