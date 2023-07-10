@@ -95,6 +95,9 @@ jobs:
         runs-on: ubuntu-latest
         env:
             GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+        defaults:
+            run:
+                working-directory: terraform
 
         steps:
             - name: Checkout Repository
@@ -104,20 +107,19 @@ jobs:
               uses: hashicorp/setup-terraform@v1
 
             - name: Terraform Init
-              run: |
-                  cd terraform
-                  terraform init
+              run: terraform init
+
+            - name: Terraform State List
+              run: terraform state list
             #   env:
             #       GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
             - name: Show Destroy plan
               run: terraform plan -destroy
               continue-on-error: true
-              env:
-                  GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+              # env:
+              #     GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
 
             - name: Terraform Destroy
-              run: |
-                  cd terraform
-                  terraform destroy --auto-approve
-              env:
-                  GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+              run: terraform destroy --auto-approve
+              # env:
+              #     GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
