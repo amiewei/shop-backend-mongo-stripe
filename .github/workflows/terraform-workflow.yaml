@@ -123,4 +123,4 @@ jobs:
               continue-on-error: true
 
             - name: Terraform Destroy
-              run: terraform destroy -lock=false --auto-approve
+              run: terraform destroy --auto-approve
