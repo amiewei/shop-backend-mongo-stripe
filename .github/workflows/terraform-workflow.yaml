@@ -118,9 +118,9 @@ jobs:
             - name: Terraform State List
               run: terraform state list
 
-            # - name: Show Destroy plan
-            #   run: terraform plan -destroy
-            #   continue-on-error: true
+            - name: Show Destroy plan
+              run: terraform plan -destroy
+              continue-on-error: true
 
             - name: Terraform Destroy
               run: terraform destroy --auto-approve

@@ -20,17 +20,20 @@ variable "domain" {
 variable "image" {
   type        = string
   description = "The Docker image for the Cloud Run service."
+  default     = "imageurl"
 }
 
 
 variable "mongo_user" {
   type        = string
   description = "mongodb user"
+  default     = "test"
 }
 
 variable "mongo_pw" {
   type        = string
   description = "mongodb pw"
+  default     = "test"
 }
 
 # variable "sa_key" {
@@ -41,4 +44,5 @@ variable "mongo_pw" {
 variable "gcp_project_id" {
   type        = string
   description = "gcp project id"
+  default     = "projectid"
 }

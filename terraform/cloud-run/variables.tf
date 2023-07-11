@@ -12,9 +12,11 @@ variable "domain" {
 
 variable "image" {
   description = "The Docker image for the Cloud Run service."
+  type        = string
 }
 
 variable "location_name" {
+  type        = string
   description = "Location of services"
 }
 
